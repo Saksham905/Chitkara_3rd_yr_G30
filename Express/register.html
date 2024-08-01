@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        h1{
+            text-align: center;
+        }
+
+        .parent{
+          display: flex;
+          justify-content: center;
+        }
+
+        form{
+            border: 1px solid black;
+            padding: 2rem 4rem;
+        }
+    </style>
+
+</head>
+<body>
+    <h1>Register Page</h1>
+    <div class="parent">
+        <form action="/register/get" method="get">
+            <label for="">Name:-</label>
+            <input type="text"><br>
+    
+            <label for="">Class</label>
+            <input type="text"><br>
+    
+            <label for="">Roll no-</label>
+            <input type="text"><br>
+    
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
