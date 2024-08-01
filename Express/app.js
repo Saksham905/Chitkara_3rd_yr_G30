@@ -20,6 +20,12 @@ app.get("/register/get",(req,res)=>{
     console.log(req.query)
 })
 
+app.use(express.urlencoded({extended:true}))
+app.post("/register/post",(req,res)=>{
+    console.log(req.body)
+})
+
+
 app.listen(PORT,()=>{
     console.log(`server starting at port ${PORT}`)
 })
