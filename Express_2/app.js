@@ -1,19 +1,19 @@
-const express=require("express")
-const path=require("path")
-const app=express()
-const PORT=4444
-const fs=require("fs")
+const express = require("express")
+const path = require("path")
+const app = express()
+const PORT = 4444
+const fs = require("fs")
 
-let mockData=[
-    {id:1,name:"aman",class:"3rd_yr"},
-    {id:2,name:"hemant",class:"3rd_yr"},
-    {id:3,name:"yash",class:"3rd_yr"},
-    {id:4,name:"shradha",class:"3rd_yr"},
-    {id:5,name:"kartik",class:"3rd_yr"},
-    {id:6,name:"sudhakar",class:"3rd_yr"},
-    {id:7,name:"aryan",class:"3rd_yr"},
+// let mockData = [
+//     { id: 1, name: "aman", class: "3rd_yr" },
+//     { id: 2, name: "hemant", class: "3rd_yr" },
+//     { id: 3, name: "yash", class: "3rd_yr" },
+//     { id: 4, name: "shradha", class: "3rd_yr" },
+//     { id: 5, name: "kartik", class: "3rd_yr" },
+//     { id: 6, name: "sudhakar", class: "3rd_yr" },
+//     { id: 7, name: "aryan", class: "3rd_yr" },
 
-]
+// ]
 
 // app.get("/",(req,res)=>{
 //     res.send("Response from server built by express")
@@ -45,27 +45,28 @@ let mockData=[
 //     console.log(req.body)
 // })
 
-app.get("/getuser",(req,res)=>{
+app.get("/getuser", (req, res) => {
     res.send(mockData)
 })
 
-app.use(express.urlencoded({extended:true}))
-app.post("/adduser",(req,res)=>{
+app.use(express.urlencoded({ extended: true }))
+
+app.post("/adduser", (req, res) => {
     console.log(req.body)
-    fs.readFile("./database.json",{encoding:"utf-8"},(err,data)=>{
-        if(err){
+    fs.readFile("./database.json", { encoding: "utf-8" }, (err, data) => {
+        if (err) {
             console.log(err)
         }
-        else{
-            let addedData=JSON.parse(data)
+        else {
+            let addedData = JSON.parse(data)
             addedData.push(req.body)
-            let stringifyData=JSON.stringify(addedData)
+            let stringifyData = JSON.stringify(addedData)
             // Know i have to write file
-            fs.writeFile("./database.json",stringifyData,(err)=>{
-                if(err){
+            fs.writeFile("./database.json", stringifyData, (err) => {
+                if (err) {
                     console.log(err)
                 }
-                else{
+                else {
                     res.send("Data added successfully!")
                 }
             })
@@ -75,21 +76,55 @@ app.post("/adduser",(req,res)=>{
 
 // We are filtering the data using array's filter method and data is coming
 // our server in req.params object 
-app.get("/getuser/:name",(req,res)=>{
-    const {name}=req.params
-    let data=mockData
-     let temp=  data.filter((element)=>element.name.toLowerCase()==name.toLowerCase())
-    if(temp.length>0){
+app.get("/getuser/:name", (req, res) => {
+    const { name } = req.params
+    let data = mockData
+    let temp = data.filter((element) => element.name.toLowerCase() == name.toLowerCase())
+    if (temp.length > 0) {
         res.send(temp)
     }
-    else{
+    else {
         res.send("User not found!")
     }
 })
 
+app.delete("/delete/:id", (req, res) => {
+    let { id } = req.params
+    fs.readFile("./database.json", { encoding: "utf-8" }, (err, mockData) => {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            let data = JSON.parse(mockData)
+            let indexOf = data.findIndex((element) => element.id == id)
+
+            if (indexOf >= 0) {
+                let filteredData = data.filter((element) => element.id != id)
+                let stringifiedData = JSON.stringify(filteredData)
+
+                fs.writeFile("./database.json", stringifiedData, (err) => {
+                    if (err) {
+                        console.log(err)
+                    }
+                    else {
+                        res.send("Your deleted successfully!")
+                    }
+                })
+            }
+
+            else {
+                res.send("Element Not found!")
+            }
 
 
-app.listen(PORT,()=>{
+        }
+    })
+
+})
+
+
+
+app.listen(PORT, () => {
     console.log(`server starting at port ${PORT}`)
 })
 
